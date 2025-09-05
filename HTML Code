@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blog Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Blog Dashboard</h1>
+
+  <!-- Blog Form -->
+  <form id="blogForm">
+    <input type="text" id="title" placeholder="Title" required>
+    <textarea id="content" placeholder="Content" required></textarea>
+    <input type="text" id="category" placeholder="Category" required>
+    <button type="submit">Add Blog</button>
+  </form>
+
+  <!-- Filter/Search -->
+  <div class="filters">
+    <input type="text" id="search" placeholder="Search by keyword...">
+    <button data-filter="all" class="filter-btn active">All</button>
+    <div id="categoryFilters"></div>
+  </div>
+
+  <!-- Blog Grid -->
+  <div id="blogGrid" class="grid"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
