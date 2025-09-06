@@ -1,0 +1,74 @@
+const form = document.getElementById("blogForm");
+const blogGrid = document.getElementById("blogGrid");
+const searchInput = document.getElementById("search");
+const categoryFilters = document.getElementById("categoryFilters");
+
+let blogs = [];
+let filter = "all";
+let searchTerm = "";
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const title = document.getElementById("title").value.trim();
+  const content = document.getElementById("content").value.trim();
+  const category = document.getElementById("category").value.trim();
+
+  if (!title || !content || !category) return;
+
+  const blog = { id: Date.now(), title, content, category };
+  blogs.push(blog);
+
+  form.reset();
+  updateCategoryFilters();
+  renderBlogs();
+});
+
+function updateCategoryFilters() {
+  const uniqueCats = [...new Set(blogs.map((b) => b.category))];
+  categoryFilters.innerHTML = "";
+  uniqueCats.forEach((cat) => {
+    const btn = document.createElement("button");
+    btn.textContent = cat;
+    btn.className = "filter-btn";
+    btn.dataset.filter = cat;
+    btn.onclick = () => {
+      filter = cat;
+      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderBlogs();
+    };
+    categoryFilters.appendChild(btn);
+  });
+}
+
+function renderBlogs() {
+  blogGrid.innerHTML = "";
+  blogs
+    .filter((b) => (filter === "all" ? true : b.category === filter))
+    .filter((b) =>
+      b.title.toLowerCase().includes(searchTerm) ||
+      b.content.toLowerCase().includes(searchTerm)
+    )
+    .forEach((blog) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <h3>${blog.title}</h3>
+        <p>${blog.content}</p>
+        <span>${blog.category}</span>
+      `;
+      blogGrid.appendChild(card);
+    });
+}
+
+searchInput.addEventListener("input", (e) => {
+  searchTerm = e.target.value.toLowerCase();
+  renderBlogs();
+});
+
+document.querySelector("[data-filter='all']").onclick = function () {
+  filter = "all";
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  this.classList.add("active");
+  renderBlogs();
+};
